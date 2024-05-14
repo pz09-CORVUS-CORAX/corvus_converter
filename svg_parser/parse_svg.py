@@ -31,11 +31,6 @@ file.close()
 doc = fitz.open(fontsPath)
 page = doc[0]
 pdf_dict = page.get_text("rawdict")
-
-# Printing bounding boxes
-doc = fitz.open('test_2.pdf')
-page_2 = doc[0]
-page_2.clean_contents()
         
 
 result = run(["node", 'svg_parser/mat-js/script.js'], input=parseFontsToJson(fontsInFile), capture_output=True, text=True, encoding='utf-8')
@@ -90,4 +85,3 @@ file.write('G0 Z10\n')
 file.write('M5\n')
 file.write('M30\n')
 file.close()
-doc.save('test_3.pdf')

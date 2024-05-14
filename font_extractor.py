@@ -2,7 +2,7 @@ import os
 import fontforge   
 from sys import argv
 
-if len(argv) < 2:
+if len(argv) < 5:
     print("Usage: fontforge -script font_extractor.py pdf_path drill_angle drill_active_height drill_movement_speed")
     quit()
 
