@@ -1,5 +1,4 @@
-from math import ceil, sqrt, tan
-from queue import Queue
+from math import sqrt, tan
 
 from numpy import deg2rad
 from line import Line

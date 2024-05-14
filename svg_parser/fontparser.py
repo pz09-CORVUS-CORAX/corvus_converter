@@ -1,11 +1,5 @@
 import json
 from xml.dom.minidom import parse
-from drawer import Drawer
-from gcode import Gcode
-from bezier_tools import Bezier
-from MAT import MAT
-from numpy import array
-from numpy.linalg import norm
 
 from glyph import Glyph
 
