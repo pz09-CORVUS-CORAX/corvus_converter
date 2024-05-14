@@ -29,7 +29,7 @@ def parseFontsToJson(fonts: list[tuple[str, list[Glyph]]])  -> str:
         jsonOutput["fonts"].append({"name": font[0], "glyphs": glyphs})
     return json.dumps(jsonOutput)
 
-def parseJsonFontMat(jsonFont):
+def parseJsonFontMat(jsonFont) -> list[tuple[Glyph, list]]:
     glyphs = []
     for glyph in jsonFont['glyphs']:
         glyphs.append((Glyph(glyph['unicode'], glyph['mat']['svg']), glyph['mat']['circles']))

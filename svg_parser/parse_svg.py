@@ -7,11 +7,6 @@ import json
 
 from gcode import Gcode
 
-def pdf_unit_to_mm(pdf_unit: float) -> float:
-    inches = pdf_unit / 72
-    return inches * 25.4
-
-
 fontsInFile = []
 
 for p in range(1, len(argv) - 4):
@@ -25,7 +20,7 @@ drillActiveHeight = float(argv[len(argv) - 2])
 drillMovementSpeed = float(argv[len(argv) - 1])
 
 file = open("fonts.json", 'w')
-file.write(parseFontsToJson(fontsInFile)) # To trzeba wysłać do JSa
+file.write(parseFontsToJson(fontsInFile))
 file.close()
 
 doc = fitz.open(fontsPath)
@@ -51,9 +46,7 @@ fonts_glyphs = []
 for font in fonts:
     fonts_glyphs.append(parseJsonFontMat(font))
 
-
-
-file = open("gcode.gcode", 'w')
+file = open("output.gcode", 'w')
 output: str = 'G21\n'
 output += 'G17\n'
 output += 'G90\n'
