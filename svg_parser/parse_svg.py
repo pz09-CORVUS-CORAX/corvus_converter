@@ -65,7 +65,7 @@ for b in pdf_dict['blocks']:
                 original_glyph = fontsInFile[block_index][1][i]
                 circles = fonts_glyphs[block_index][i][1]
                 scale_factor = glyph.scale_and_move_to_bbox(c['bbox'][0], c['bbox'][1], c['bbox'][2], c['bbox'][3], original_glyph)
-                glyph.scale(0.03937007874, 0.03937007874) #Inches to mm conversion
+                glyph.scale(0.3937007874, 0.3937007874) #Inches to mm conversion
                 radiuses = []
                 for circle in circles:
                     radiuses.append(circle['radius'] * scale_factor) 
