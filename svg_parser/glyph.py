@@ -4,7 +4,24 @@ from bezier_tools import Bezier
 from numpy.linalg import norm
 
 class Glyph:
+    """
+    Klasa reprezentująca pojedynczy glif (znak)
+
+    Attributes:
+        unicode (str): Unicode znaku
+        svg_path (str): Ścieżka SVG znaku
+        horiz_adv_x (float): Szerokość znaku
+        lines (list[Line]): Lista linii tworzących znak
+    """
     def __init__(self, unicode: str, svg_path: str, horiz_adv_x: float = None):
+        """
+        Konstruktor klasy Glyph
+
+        Args:
+            unicode (str): Unicode znaku
+            svg_path (str): Ścieżka SVG znaku
+            horiz_adv_x (float): Szerokość znaku
+        """
         self.unicode = unicode
         self.svg_path = svg_path
         self.horiz_adv_x = horiz_adv_x
@@ -14,6 +31,9 @@ class Glyph:
         self.scale(1, -1)
 
     def __parse_svg_path(self):
+        """
+        Metoda parsująca ścieżkę SVG znaku na linie
+        """
         last_num = 0
         floating_point = 0
         is_last_num = False
@@ -56,6 +76,9 @@ class Glyph:
 
 
     def __process_lines(self):
+        """
+        Metoda przetwarzająca linie znaku
+        """
         last_x = None
         last_y = None
         last_ctrl_x = None
@@ -84,20 +107,43 @@ class Glyph:
                 last_y = None
                 
     def svg_code(self) -> str:
+        """
+        Generuje kod SVG znaku
+
+        Returns:
+            str: Kod SVG znaku
+        """
         output = ""
         for line in self.lines:
             output += line.svg_line() + ' '
         return output
 
     def transform(self, x: float, y: float):
+        """
+        Przesuwa znak o podane wartości
+
+        Args:
+            x (float): Wartość przesunięcia w osi X
+            y (float): Wartość przesunięcia w osi Y
+        """
         for line in self.lines:
             line.transform(x, y)
 
     def scale(self, x: float, y: float):
+        """
+        Skaluje znak o podane wartości
+
+        Args:
+            x (float): Wartość skalowania w osi X
+            y (float): Wartość skalowania w osi Y
+        """
         for line in self.lines:
             line.scale(x, y)
     
     def print_glyph(self):
+        """
+        Wypisuje wszystkie linie tworzące znak
+        """
         print("[" + self.unicode + "]")
         for line in self.lines:
             print("\t", end="")
@@ -106,6 +152,12 @@ class Glyph:
         print()
 
     def glyph_bbox(self) -> list[float]:
+        """
+        Zwraca bounding box znaku
+
+        Returns:
+            list[float]: Bounding box znaku [x0, y0, x1, y1]
+        """
         x0 = self.lines[0].points[0]
         x1 = self.lines[0].points[0]
         y0 = self.lines[0].points[1]
@@ -126,6 +178,15 @@ class Glyph:
 
 
     def print_glyph_point_notation(self, accuracy: float = 0.1):
+        """
+        Zwraca znak w postaci punktowej
+
+        Args:
+            accuracy (float): Dokładność przybliżenia krzywych Beziera
+        
+        Returns:
+            str: Znak w postaci punktowej
+        """
         glyph_str = ''
         glyph_str += ">" + self.unicode + '\n'
         for line in self.lines:
@@ -133,6 +194,14 @@ class Glyph:
         return glyph_str
      
     def closest_line(self, point: list[float]) -> Line:
+        """
+        Zwraca najbliższą linię do podanego punktu
+
+        Args:
+            point (list[float]): Punkt [x, y]
+        Returns:
+            Line: Najbliższa linia
+        """
         closest_line = self.lines[0]
         closest_distance = closest_line.distance_to_line(point)
         for line in self.lines:
@@ -144,6 +213,15 @@ class Glyph:
         return closest_line
     
     def last_line(self, line: Line) -> Line:
+        """
+        Zwraca poprzednią linię do podanej linii
+
+        Args:
+            line (Line): Linia
+
+        Returns:
+            Line: Poprzednia linia
+        """
         index = self.lines.index(line)
         if(line.ltype == 'M'):
             for i in range(index, len(self.lines)):
@@ -155,6 +233,12 @@ class Glyph:
         return last_l
     
     def sharp_corners(self) -> list[list[float]]:
+        """
+        Zwraca punkty ostrych narożników
+
+        Returns:
+            list[list[float]]: Lista punktów ostrych narożników
+        """
         sharp_corners = []
         for i, line in enumerate(self.lines):
             last_line = self.last_line(line)
@@ -212,7 +296,20 @@ class Glyph:
             
         return sharp_corners
     
-    def scale_and_move_to_bbox(self, x0: float, y0: float, x1: float, y1: float, original_glyph):
+    def scale_and_move_to_bbox(self, x0: float, y0: float, x1: float, y1: float, original_glyph) -> float:
+        """
+        Skaluje i przesuwa znak do podanego bounding box
+
+        Args:
+            x0 (float): Współrzędna x0 bounding box
+            y0 (float): Współrzędna y0 bounding box
+            x1 (float): Współrzędna x1 bounding box
+            y1 (float): Współrzędna y1 bounding box
+            original_glyph (Glyph): Oryginalny znak
+        
+        Returns:
+            float: Współczynnik skalowania w osi X
+        """
         current_bbox = original_glyph.glyph_bbox()
         current_width = original_glyph.horiz_adv_x
         current_height = current_bbox[3] - current_bbox[1]

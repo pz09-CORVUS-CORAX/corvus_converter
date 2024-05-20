@@ -4,7 +4,24 @@ from numpy.linalg import norm
 from numpy import array
 
 class Line:
-    def __init__(self, ltype: str = "", points: list = []):
+    """
+    Klasa reprezentująca pojedynczy fragment ścieżki SVG
+
+    Attributes:
+        ltype (str): Typ fragmentu ścieżki SVG obejmuje proste i krzywe beziera drugiego stopnia, np. 'L', 'M', 'Q', 'Z'
+        points (list[float]): Lista punktów kontrolnych, np. [0, 0, 100, 100]
+        last_point (list[float]): Puunkt początkowy fragmentu ścieżki, ostatni punkt poprzedniego fragmentu
+        last_control_point (list[float]): Ostatni punkt kontrolny krzywej beziera drugiego stopnia
+        last_M_point (list[float]): Ostatni punkt typu 'M' w ścieżce SVG
+    """
+    def __init__(self, ltype: str = "", points: list[float] = []):
+        """
+        Konstruktor klasy Line
+
+        Args:
+            ltype (str): Typ fragmentu ścieżki SVG obejmuje proste i krzywe beziera drugiego stopnia, np. 'L', 'M', 'Q', 'Z'
+            points (list[float]): Lista punktów kontrolnych, np. [0, 0, 100, 100]
+        """
         self.ltype = ltype
         self.points = points.copy()
         self.last_point = []
@@ -12,22 +29,55 @@ class Line:
         self.last_M_point = []
 
     def set_last_M_point(self, x: float, y: float):
+        """
+        Ustawia ostatni punkt typu 'M' w ścieżce SVG
+
+        Args:
+            x (float): Współrzędna x punktu
+            y (float): Współrzędna y punktu
+        """
         if x is not None and y is not None:
             self.last_M_point = [x, y]
 
     def set_last_point(self, x: float, y: float):
+        """
+        Ustawia ostatni punkt poprzedniego fragmentu ścieżki SVG
+
+        Args:
+            x (float): Współrzędna x punktu
+            y (float): Współrzędna y punktu
+        """
         if x is not None and y is not None:
             self.last_point = [x, y]
     
     def set_last_control_point(self, x: float, y: float):
+        """
+        Ustawia ostatni punkt kontrolny krzywej beziera drugiego stopnia
+
+        Args:
+            x (float): Współrzędna x punktu
+            y (float): Współrzędna y punktu
+        """
         if x is not None and y is not None:
             self.last_control_point = [x, y]
 
     def print_line(self):
+        """
+        Wypisuje informacje o fragmencie ścieżki SVG
+        """
         print('[' + self.ltype + ']', end='->')
         print(self.points)
     
-    def print_line_point_notation(self, accuracy: float = 0.1):
+    def line_point_notation(self, accuracy: float = 0.1) -> str:
+        """
+        Wypisuje informacje o fragmencie ścieżki SVG w notacji punktowej
+
+        Args:
+            accuracy (float): Dokładność przybliżenia krzywej beziera drugiego stopnia
+        
+        Returns:
+            str: Zwraca informacje o fragmencie ścieżki SVG w notacji punktowej
+        """
         line_str = ""
         last_point = self.last_point
         if(self.ltype == 'L'):
@@ -52,12 +102,25 @@ class Line:
         return line_str
 
     def svg_line(self) -> str:
+        """
+        Zwraca informacje o fragmencie ścieżki SVG w notacji SVG
+
+        Returns:
+            str: Zwraca informacje o fragmencie ścieżki SVG w notacji SVG
+        """
         output = self.ltype
         for p in self.points:
             output += ' ' + str(p)
         return output
             
     def scale(self, x: float, y: float):
+        """
+        Skaluje fragment ścieżki SVG
+
+        Args:
+            x (float): Współczynnik skalowania w osi x
+            y (float): Współczynnik skalowania w osi y
+        """
         if len(self.points)%2 == 0:
             for i in range(0, len(self.points), 2):
                 self.points[i] *= x
@@ -75,6 +138,13 @@ class Line:
             print("Can't scale")
 
     def transform(self, x: float, y: float):
+        """
+        Przesuwa fragment ścieżki SVG
+
+        Args:
+            x (float): Wartość przesunięcia w osi x
+            y (float): Wartość przesunięcia w osi y
+        """
         if len(self.points)%2 == 0:
             for i in range(0, len(self.points), 2):
                 self.points[i] += x
@@ -92,6 +162,12 @@ class Line:
             print("Can't transform")
     
     def process_line(self, to_absolute: bool = True):
+        """
+        Przetwarza fragment ścieżki SVG
+
+        Args:
+            to_absolute (bool): Czy zamienić punkty na wartości bezwzględne
+        """
         if self.ltype == 'v' or self.ltype == 'V':
             self.ltype = 'l'
             self.points.insert(0, 0)
@@ -125,7 +201,16 @@ class Line:
                     else:
                         self.points[i] += self.last_point[1]
 
-    def distance_to_line(self, point: list[float]):
+    def distance_to_line(self, point: list[float]) -> float:
+        """
+        Zwraca odległość punktu od fragmentu ścieżki SVG
+
+        Args:
+            point (list[float]): Punkt [x, y]
+
+        Returns:
+            float: Odległość punktu od fragmentu ścieżki SVG
+        """
         if self.ltype == 'L':
             if(self.points[0] - self.last_point[0] == 0):
                 if point[1] > max(self.points[1], self.last_point[1]):
@@ -167,7 +252,16 @@ class Line:
         else:
             return sqrt((self.last_point[0] - point[0])**2 + (self.last_point[1] - point[1])**2)
     
-    def closest_point(self, point: list[float]):
+    def closest_point(self, point: list[float]) -> list[float]:
+        """
+        Zwraca punkt najbliższy na fragmencie ścieżki do punktu podanego jako argument
+
+        Args:
+            point (list[float]): Punkt [x, y]
+
+        Returns:
+            list[float]: Punkt najbliższy na fragmencie ścieżki do punktu podanego jako argument
+        """
         if self.ltype == 'L':
             if(self.points[0] - self.last_point[0]) == 0:
                 if point[1] > max(self.points[1], self.last_point[1]):

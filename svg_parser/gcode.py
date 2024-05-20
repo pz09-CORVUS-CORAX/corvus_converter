@@ -4,7 +4,20 @@ from numpy import deg2rad
 from line import Line
 
 class Gcode:
-    def lines_to_Gcode_bezier_G1(lines: list[Line], accuracy: float):
+    """
+    Klasa zawierająca metody do konwersji linii na Gcode
+    """
+    def lines_to_Gcode_bezier_G1(lines: list[Line], accuracy: float) -> str:
+        """
+        Konwertuje linie na Gcode z zamianą krzywych Beziera w linie G1
+
+        Args:
+            lines (list[Line]): lista linii do konwersji
+            accuracy (float): dokładność konwersji krzywych Beziera
+
+        Returns:
+            str: Gcode
+        """
         output: str = 'G21\n'
         output += 'G17\n'
         output += 'G90\n'
@@ -54,6 +67,15 @@ class Gcode:
     
 
     def lines_to_Gcode_with_G5(lines: list[Line]) -> str:
+        """
+        Konwertuje linie na Gcode z zamianą krzywych Beziera w linie G5
+
+        Args:
+            lines (list[Line]): lista linii do konwersji
+
+        Returns:
+            str: Gcode
+        """
         last_line: Line = None
         output: str = "G90 G17\n"
         for line in lines:
@@ -93,6 +115,20 @@ class Gcode:
         return output
     
     def lines_to_Gcode_with_radius(lines: list[Line], radiuses: list[float], millAngle: float, millHeight: float, millTravelSpeed: float, accuracy: float = 0.1) -> str:
+        """
+        Konwertuje linie na Gcode z uwzględnieniem parametrów freza
+
+        Args:
+            lines (list[Line]): lista linii do konwersji
+            radiuses (list[float]): lista promieni okręgów wpisanych w kształt znaku
+            millAngle (float): kąt ostrza freza
+            millHeight (float): długość ostrza freza
+            millTravelSpeed (float): prędkość przemieszczania freza
+            accuracy (float, optional): dokładność konwersji krzywych Beziera. Defaults to 0.1.
+
+        Returns:
+            str: Gcode
+        """
         output = ''
         non_milling_travel_speed = 100
         millHeight *= 0.95
@@ -162,11 +198,38 @@ class Gcode:
 
 
 def _bezier(x0, y0, x1, y1, x2, y2, t) -> tuple[float, float]:
+        """
+        Funkcja zwracająca punkt na krzywej Beziera dla danego parametru t
+
+        Args:
+            x0 (float): x początkowego punktu
+            y0 (float): y początkowego punktu
+            x1 (float): x punktu kontrolnego
+            y1 (float): y punktu kontrolnego
+            x2 (float): x końcowego punktu
+            y2 (float): y końcowego punktu
+            t (float): parametr t
+        
+        Returns:
+            tuple[float, float]: punkt na krzywej Beziera dla danego parametru t
+        """
         x = ((1-t)*(1-t))*x0 + 2*(1-t)*t*x1 + t*t*x2
         y = ((1-t)*(1-t))*y0 + 2*(1-t)*t*y1 + t*t*y2
         return (x,y)
 
 def normal_right(x0, y0, x1, y1) -> tuple[float, float]:
+    """
+    Zwraca wektor normalny do linii w prawo
+
+    Args:
+        x0 (float): x początkowego punktu
+        y0 (float): y początkowego punktu
+        x1 (float): x końcowego punktu
+        y1 (float): y końcowego punktu
+    
+    Returns:
+        tuple[float, float]: wektor normalny do linii w prawo
+    """
     y = y1 - y0
     x = x1 - x0
     if x == 0 and y == 0:
@@ -177,8 +240,17 @@ def normal_right(x0, y0, x1, y1) -> tuple[float, float]:
     y /= tangent_len
     return (y, -x)
 
-# angle in degrees    
 def heightForRadius(radius: float, angle: float) -> float:
+    """
+    Zwraca wysokość frezowania dla danego promienia i kąta ostrza
+
+    Args:
+        radius (float): promień okręgu
+        angle (float): kąt ostrza freza w stopniach
+
+    Returns:
+        float: wysokość frezowania
+    """
     if angle >= 180 or angle <= 0:
         return 0
     
