@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module fontparser</title>
+</head><body>
+
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title">fontparser</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cstudia%5Czesp%5Cdocs%5Cfontparser.py">c:\studia\zesp\docs\fontparser.py</a></td></tr></table>
+    <p></p>
+<p>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
+    
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="json.html">json</a><br>
+</td><td class="multicolumn"></td><td class="multicolumn"></td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
+    
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-parseFont"><strong>parseFont</strong></a>(path_to_font: str) -&gt; list[glyph.Glyph]</dt><dd><span class="code">Parsuje&nbsp;font&nbsp;w&nbsp;formacie&nbsp;svg&nbsp;na&nbsp;listę&nbsp;obiektów&nbsp;Glyph<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;path_to_font&nbsp;(str):&nbsp;ścieżka&nbsp;do&nbsp;pliku&nbsp;svg<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;list[Glyph]:&nbsp;lista&nbsp;obiektów&nbsp;Glyph</span></dd></dl>
+ <dl><dt><a name="-parseFontsToJson"><strong>parseFontsToJson</strong></a>(fonts: list[tuple[str, list[glyph.Glyph]]]) -&gt; str</dt><dd><span class="code">Parsuje&nbsp;listę&nbsp;fontów&nbsp;na&nbsp;JSON<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;fonts&nbsp;(list[tuple[str,&nbsp;list[Glyph]]]):&nbsp;lista&nbsp;fontów&nbsp;do&nbsp;parsowania<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;JSON</span></dd></dl>
+ <dl><dt><a name="-parseJsonFontMat"><strong>parseJsonFontMat</strong></a>(jsonFont) -&gt; list[tuple[glyph.Glyph, list]]</dt><dd><span class="code">Parsuje&nbsp;JSON&nbsp;na&nbsp;listę&nbsp;obiektów&nbsp;Glyph&nbsp;i&nbsp;listę&nbsp;okręgów<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;jsonFont:&nbsp;JSON&nbsp;z&nbsp;fontem<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;List[tuple[Glyph,&nbsp;list]]:&nbsp;lista&nbsp;obiektów&nbsp;Glyph&nbsp;z&nbsp;okręgami</span></dd></dl>
+</td></tr></table>
+</body></html>
